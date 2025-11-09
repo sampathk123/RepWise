@@ -392,7 +392,10 @@ export function ExercisePanel({ selectedMuscle, onStartFormCheck }: ExercisePane
                   </div>
 
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-gradient-to-r from-blue-600 to-teal-600 text-white py-2 rounded-lg hover:from-blue-700 hover:to-teal-700 transition-colors flex items-center justify-center gap-2">
+                    <button 
+                    onClick={() => window.open('https://youtu.be/3R14MnZbcpw?si=S3mA9lElAKAqOa0v', '_blank')}
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-teal-600 text-white py-2 rounded-lg hover:from-blue-700 hover:to-teal-700 transition-colors flex items-center justify-center gap-2">
+
                       <Play className="w-4 h-4" />
                       Watch Tutorial
                     </button>

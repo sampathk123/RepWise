@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { MuscleMap } from "./components/MuscleMap";
-import VideoRecorder from "./components/VideoRecorder";
-import { ArrowLeft, Dumbbell, BarChart3 } from "lucide-react";
-import { ProgressTracker } from "./components/ProgressTracker";
+import { useState } from 'react';
+import { MuscleMap } from './components/MuscleMap';
+import VideoRecorder from './components/VideoRecorder';
+import { ArrowLeft, Dumbbell, BarChart3, Library, Home } from 'lucide-react';
+import { ProgressTracker } from './components/ProgressTracker';
+import { ExerciseLibrary } from './components/ExerciseLibrary';
 
-type Page = "muscle-map" | "form-check" | "progress-tracker";
+type Page = 'muscle-map' | 'form-check' | 'progress-tracker' | 'exercise-library';
 
 export interface SelectedExercise {
   name: string;
@@ -12,26 +13,25 @@ export interface SelectedExercise {
 }
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>("muscle-map");
+  const [currentPage, setCurrentPage] = useState<Page>('muscle-map');
   const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
-  const [selectedExercise, setSelectedExercise] =
-    useState<SelectedExercise | null>(null);
+  const [selectedExercise, setSelectedExercise] = useState<SelectedExercise | null>(null);
 
   const handleSelectMuscle = (muscle: string) => setSelectedMuscle(muscle);
 
   const handleStartFormCheck = (exerciseName: string, exerciseId: string) => {
     setSelectedExercise({ name: exerciseName, id: exerciseId });
-    setCurrentPage("form-check");
+    setCurrentPage('form-check');
   };
 
   const handleBackToMuscleMap = () => {
-    setCurrentPage("muscle-map");
+    setCurrentPage('muscle-map');
     setSelectedExercise(null);
   };
 
-  const handleGoToProgress = () => {
-    setCurrentPage("progress-tracker");
-  };
+  const handleGoToProgress = () => setCurrentPage('progress-tracker');
+  const handleGoToExerciseLibrary = () => setCurrentPage('exercise-library');
+  const handleGoHome = () => setCurrentPage('muscle-map');
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -39,35 +39,48 @@ export default function App() {
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
+            {/* Left Logo and Title */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-teal-600 rounded-lg flex items-center justify-center">
                 <Dumbbell className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">
-                  AI Fitness Coach
-                </h1>
+                <h1 className="text-xl font-bold text-slate-900">AI Fitness Coach</h1>
                 <p className="text-xs text-slate-600">
-                  {currentPage === "muscle-map" && "Muscle Map & Library"}
-                  {currentPage === "form-check" && "Form Check"}
-                  {currentPage === "progress-tracker" && "Progress Tracker"}
+                  {currentPage === 'muscle-map' && 'Muscle Map & Library'}
+                  {currentPage === 'form-check' && 'Form Check'}
+                  {currentPage === 'progress-tracker' && 'Progress Tracker'}
+                  {currentPage === 'exercise-library' && 'Exercise Library'}
                 </p>
               </div>
             </div>
 
-            {/* Header Buttons */}
-            <div className="flex items-center gap-4">
-              {currentPage === "form-check" && (
+            {/* Navigation Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Back to Main Menu for Progress Tracker & Exercise Library */}
+              {(currentPage === 'progress-tracker' || currentPage === 'exercise-library') && (
                 <button
-                  onClick={handleBackToMuscleMap}
-                  className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                  onClick={handleGoHome}
+                  className="flex items-center gap-2 px-4 py-2 border border-indigo-500 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold hover:opacity-80 transition"
                 >
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Exercises
+                  <Home className="w-4 h-4 text-indigo-600" />
+                  <span>Back to Main Menu</span>
                 </button>
               )}
 
-              {currentPage !== "progress-tracker" && (
+              {/* Exercise Library Button (visible only on main menu) */}
+              {currentPage === 'muscle-map' && (
+                <button
+                  onClick={handleGoToExerciseLibrary}
+                  className="flex items-center gap-2 px-4 py-2 border border-indigo-500 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold hover:opacity-80 transition"
+                >
+                  <Library className="w-4 h-4 text-indigo-600" />
+                  <span>Exercise Library</span>
+                </button>
+              )}
+
+              {/* Progress Tracker Button (visible only on main menu) */}
+              {currentPage === 'muscle-map' && (
                 <button
                   onClick={handleGoToProgress}
                   className="flex items-center gap-2 px-4 py-2 border border-indigo-500 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 font-semibold hover:opacity-80 transition"
@@ -77,13 +90,14 @@ export default function App() {
                 </button>
               )}
 
-              {currentPage === "progress-tracker" && (
+              {/* Back button for Form Check */}
+              {currentPage === 'form-check' && (
                 <button
-                  onClick={() => setCurrentPage("muscle-map")}
+                  onClick={handleBackToMuscleMap}
                   className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to Main
+                  Back to Exercises
                 </button>
               )}
             </div>
@@ -93,7 +107,7 @@ export default function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentPage === "muscle-map" && (
+        {currentPage === 'muscle-map' && (
           <MuscleMap
             selectedMuscle={selectedMuscle}
             onSelectMuscle={handleSelectMuscle}
@@ -101,11 +115,13 @@ export default function App() {
           />
         )}
 
-        {currentPage === "form-check" && selectedExercise && (
+        {currentPage === 'form-check' && selectedExercise && (
           <VideoRecorder exercise={selectedExercise} />
         )}
 
-        {currentPage === "progress-tracker" && <ProgressTracker />}
+        {currentPage === 'progress-tracker' && <ProgressTracker />}
+
+        {currentPage === 'exercise-library' && <ExerciseLibrary />}
       </main>
     </div>
   );
