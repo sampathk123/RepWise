@@ -1,7 +1,7 @@
 
-  # Interactive Muscle Map
+  # RepWise
 
-  This is a code bundle for Interactive Muscle Map. The original project is available at https://www.figma.com/design/pxd35kfRaQaARu7Z32JCWG/Interactive-Muscle-Map.
+  An Intelligent Gym Buddy that helps you check your form.
 
   ## Running the code
 
